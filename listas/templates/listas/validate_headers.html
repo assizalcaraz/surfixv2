@@ -1,0 +1,103 @@
+{% extends 'home/base.html' %}
+
+{% block extra_head %}
+    <title>Validar Encabezados</title>
+    <style>
+        .validation-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            background: #f9f9f9;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 0 10px rgba(0,0,0,0.05);
+        }
+
+        h1 {
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1rem;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 0.75rem;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f6570e;
+            color: white;
+        }
+
+        select, input[type="text"] {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 0.25rem;
+        }
+
+        label {
+            display: block;
+            margin: 1rem 0 0.5rem;
+        }
+
+        button {
+            margin-top: 1rem;
+            padding: 0.6rem 1.2rem;
+            background-color: #f6570e;
+            color: white;
+            border: none;
+            border-radius: 0.25rem;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #ff8307;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+<div class="validation-container">
+    <h1>Validar Encabezados</h1>
+    <form method="post">
+        {% csrf_token %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Encabezado Encontrado</th>
+                    <th>Encabezado Esperado</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for header in headers %}
+                <tr>
+                    <td>{{ header }}</td>
+                    <td>
+                        <select name="attribute_{{ forloop.counter }}">
+                            {% for possible_header in possible_headers %}
+                            <option value="{{ possible_header }}" {% if possible_header == header %}selected{% endif %}>
+                                {{ possible_header }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <input type="hidden" name="total_headers" value="{{ headers|length }}">
+
+        <label for="omit_text">Texto a omitir:</label>
+        <input type="text" name="omit_text" id="omit_text" value="{{ omit_text }}">
+
+        <button type="submit">Validar</button>
+    </form>
+</div>
+{% endblock %}

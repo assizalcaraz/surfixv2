@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Configurar Listas</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'listas/style.css' %}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>Configurar Listas</h1>
+
+    <div>
+        <input type="text" id="buscar_producto" placeholder="Buscar productos...">
+    </div>
+
+    <div id="filtrar">
+        <label>Filtrar por:</label>
+        <label>
+            <input type="checkbox" id="filtro_todos" checked> Todos
+        </label>
+        <label>
+            <input type="checkbox" id="filtro_categoria" checked> Categoría
+        </label>
+        <label>
+            <input type="checkbox" id="filtro_producto" checked> Producto
+        </label>
+    </div>
+
+    <div id="opciones">
+        <label>Opciones:</label>
+        <label>
+            <input type="checkbox" id="opciones_todos" checked> Todos
+        </label>
+        <div id="opciones_categoria">
+            <label>Categorías:</label>
+            {% for categoria in categorias %}
+                <label>
+                    <input type="checkbox" class="categoria-checkbox" value="{{ categoria }}" checked>
+                    {{ categoria }}
+                </label>
+            {% endfor %}
+        </div>
+        <div id="opciones_producto">
+            <label>Productos:</label>
+            {% for producto in productos_nombres %}
+                <label>
+                    <input type="checkbox" class="producto-checkbox" value="{{ producto }}" checked>
+                    {{ producto }}
+                </label>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div id="modificar">
+        <label>Modificar:</label>
+        <input type="text" id="nombre_nuevo" placeholder="Nombre de la nueva categoría o producto">
+        <button id="btnAñadirCategoria">Añadir categoría</button>
+        <button id="btnAñadirProducto">Añadir producto</button>
+    </div>
+
+    <button id="select_all">Seleccionar/Deseleccionar Todos</button>
+
+    <form id="asignarCategoriaForm" method="post" action="{% url 'asignar_categoria' %}">
+        {% csrf_token %}
+        <div>
+            <label for="categoria">Nueva Categoría:</label>
+            <input type="text" id="categoria" name="categoria">
+        </div>
+        <table id="lista_productos">
+            <thead>
+                <tr>
+                    <th>Select</th>
+                    <th>Código</th>
+                    <th>Grano</th>
+                    <th>Precio Unidad</th>
+                    <th>Formato</th>
+                    <th>Descuento</th>
+                    <th>AD</th>
+                    <th>Largo</th>
+                    <th>Ancho</th>
+                    <th>Litros</th>
+                    <th>Producto</th>
+                    <th>Medidas</th>
+                    <th>Unidades x Caja</th>
+                    <th>Cantidad</th>
+                    <th>Número</th>
+                    <th>Categoría</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for producto in productos %}
+                    <tr class="producto-row" data-categoria="{{ producto.categoria }}" data-producto="{{ producto.producto }}" data-id="{{ producto.id }}">
+                        <td><input type="checkbox" name="ids[]" value="{{ producto.id }}"></td>
+                        <td>{{ producto.codigo }}</td>
+                        <td>{{ producto.grano }}</td>
+                        <td>{{ producto.precio_unidad }}</td>
+                        <td>{{ producto.formato }}</td>
+                        <td>{{ producto.descuento }}</td>
+                        <td>{{ producto.ad }}</td>
+                        <td>{{ producto.largo }}</td>
+                        <td>{{ producto.ancho }}</td>
+                        <td>{{ producto.litros }}</td>
+                        <td class="producto-nombre">{{ producto.producto }}</td>
+                        <td>{{ producto.medidas }}</td>
+                        <td>{{ producto.unidades_x_caja }}</td>
+                        <td>{{ producto.cantidad }}</td>
+                        <td>{{ producto.numero }}</td>
+                        <td>{{ producto.categoria }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </form>
+
+    <script>
+        $(document).ready(function() {
+            $("#buscar_producto").on("keyup", function() {
+                var value = $(this).val().toLowerCase();
+                $("#lista_productos tbody tr").filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                });
+            });
+
+            $("#filtro_todos").on("change", function() {
+                var isChecked = $(this).is(":checked");
+                $("#filtro_categoria, #filtro_producto").prop("checked", isChecked).change();
+            });
+
+            $("#opciones_todos").on("change", function() {
+                var isChecked = $(this).is(":checked");
+                $(".categoria-checkbox, .producto-checkbox").prop("checked", isChecked).change();
+            });
+
+            $("#filtro_categoria, #filtro_producto").on("change", function() {
+                var filtroCategoria = $("#filtro_categoria").is(":checked");
+                var filtroProducto = $("#filtro_producto").is(":checked");
+
+                if (filtroCategoria) {
+                    $("#opciones_categoria").show();
+                } else {
+                    $("#opciones_categoria").hide();
+                }
+
+                if (filtroProducto) {
+                    $("#opciones_producto").show();
+                } else {
+                    $("#opciones_producto").hide();
+                }
+            }).change();
+
+            $(".categoria-checkbox, .producto-checkbox").on("change", function() {
+                var categoriasSeleccionadas = $(".categoria-checkbox:checked").map(function() {
+                    return $(this).val();
+                }).get();
+
+                var productosSeleccionados = $(".producto-checkbox:checked").map(function() {
+                    return $(this).val();
+                }).get();
+
+                $(".producto-row").each(function() {
+                    var categoria = $(this).data("categoria");
+                    var producto = $(this).data("producto");
+
+                    var mostrar = true;
+
+                    if ($("#filtro_categoria").is(":checked")) {
+                        mostrar = mostrar && categoriasSeleccionadas.includes(categoria);
+                    }
+
+                    if ($("#filtro_producto").is(":checked")) {
+                        mostrar = mostrar && productosSeleccionados.includes(producto);
+                    }
+
+                    $(this).toggle(mostrar);
+                });
+            }).change();
+
+            $("#btnAñadirCategoria").on("click", function() {
+                var nuevoNombre = $("#nombre_nuevo").val();
+                if (nuevoNombre) {
+                    var ids = $("input[name='ids[]']:checked").map(function() {
+                        return $(this).val();
+                    }).get();
+
+                    $.post("{% url 'asignar_categoria' %}", {
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                        categoria: nuevoNombre,
+                        ids: ids
+                    }, function(data) {
+                        location.reload();
+                    });
+                }
+            });
+
+            $("#btnAñadirProducto").on("click", function() {
+                var nuevoNombre = $("#nombre_nuevo").val();
+                if (nuevoNombre) {
+                    var ids = $("input[name='ids[]']:checked").map(function() {
+                        return $(this).val();
+                    }).get();
+
+                    $.ajax({
+                        url: "{% url 'asignar_producto' %}",
+                        type: "POST",
+                        data: {
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                            producto: nuevoNombre,
+                            ids: ids
+                        },
+                        success: function(data) {
+                            $("input[name='ids[]']:checked").each(function() {
+                                var row = $(this).closest("tr");
+                                row.find(".producto-nombre").text(nuevoNombre);
+                            });
+                            $("#nombre_nuevo").val("");
+                        }
+                    });
+                }
+            });
+
+            $("#select_all").on("click", function() {
+                var isChecked = $("#lista_productos tbody input[type='checkbox']:visible").first().prop("checked");
+                $("#lista_productos tbody input[type='checkbox']:visible").prop("checked", !isChecked);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+*.log
+*.sqlite3
+*.env
+*.env.*
+
+# Django
+/static/
+media/
+db.sqlite3
+
+# Docker
+*.pid
+*.sock
+.env
+docker-compose.override.yml
+docker/nginx/nginx.conf
+
+# VSCode / IDEs
+.vscode/
+.idea/
+
+# Entornos virtuales
+env/
+venv/
+.venv/
+
+# Archivos temporales
+*.bak
+*.swp
+*~
+*.DS_Store
+
+# Otros
+*.zip

@@ -1,0 +1,99 @@
+{% extends 'home/base.html' %}
+
+{% block extra_head %}
+    <title>Subir archivo Excel</title>
+    <style>
+        .upload-container {
+            max-width: 600px;
+            margin: 2rem auto;
+            background: #f9f9f9;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 0 10px rgba(0,0,0,0.05);
+        }
+        h1, h2 {
+            margin-bottom: 1rem;
+        }
+        label {
+            display: block;
+            margin: 0.5rem 0;
+        }
+        button {
+            margin-top: 1rem;
+            padding: 0.5rem 1rem;
+            background-color: #f6570e;
+            color: white;
+            border: none;
+            border-radius: 0.25rem;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #ff8307;
+        }
+
+        input[type="radio"] {
+            appearance: none;
+            -webkit-appearance: none;
+            background-color: #fff;
+            margin-right: 0.5rem;
+            font: inherit;
+            width: 1.2rem;
+            height: 1.2rem;
+            border: 2px solid #f6570e;
+            border-radius: 50%;
+            display: inline-grid;
+            place-content: center;
+            vertical-align: middle;
+            cursor: pointer;
+            position: relative;
+        }
+
+        input[type="radio"]::before {
+            content: "";
+            width: 0.6rem;
+            height: 0.6rem;
+            border-radius: 50%;
+            transform: scale(0);
+            transition: 120ms transform ease-in-out;
+            background-color: #f6570e;
+        }
+
+        input[type="radio"]:checked::before {
+            transform: scale(1);
+        }
+
+        label input[type="radio"] + span {
+            vertical-align: middle;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+<div class="upload-container">
+
+    {% if messages %}
+        <div class="alert alert-success" role="alert">
+            {% for message in messages %}
+                {{ message }}
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <h1>Subir archivo Excel</h1>
+    <form method="post" action="{% url 'upload_file' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="excel_file">Seleccione un archivo Excel:</label>
+        <input type="file" name="excel_file" id="excel_file" required>
+
+        <h2>Seleccionar categoría para todos los productos:</h2>
+        <label><input type="radio" name="categoria" value="Abrasivos" required> <span>Abrasivos</span></label>
+        <label><input type="radio" name="categoria" value="Cintas Rapifix"> <span>Cintas Rapifix</span></label>
+        <label><input type="radio" name="categoria" value="Fijapel"> <span>Fijapel</span></label>
+        <label><input type="radio" name="categoria" value="Pintura"> <span>Pintura</span></label>
+        <label><input type="radio" name="categoria" value="Pinceles"> <span>Pinceles</span></label>
+        <label><input type="radio" name="categoria" value="Rodillos"> <span>Rodillos</span></label>
+
+        <button type="submit">Subir</button>
+    </form>
+</div>
+{% endblock %}

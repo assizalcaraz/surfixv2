@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Identificar Duplicados</title>
+</head>
+<body>
+    <h1>Productos Duplicados</h1>
+    <form method="post" action="{% url 'admin:eliminar_duplicados' %}">
+        {% csrf_token %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Grano</th>
+                    <th>Precio Unidad</th>
+                    <th>Formato</th>
+                    <th>Descuento</th>
+                    <th>AD</th>
+                    <th>Largo</th>
+                    <th>Ancho</th>
+                    <th>Litros</th>
+                    <th>Producto</th>
+                    <th>Medidas</th>
+                    <th>Unidades x Caja</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for producto in productos_duplicados %}
+                <tr>
+                    <td>{{ producto.codigo }}</td>
+                    <td>{{ producto.grano }}</td>
+                    <td>{{ producto.precio_unidad }}</td>
+                    <td>{{ producto.formato }}</td>
+                    <td>{{ producto.descuento }}</td>
+                    <td>{{ producto.ad }}</td>
+                    <td>{{ producto.largo }}</td>
+                    <td>{{ producto.ancho }}</td>
+                    <td>{{ producto.litros }}</td>
+                    <td>{{ producto.producto }}</td>
+                    <td>{{ producto.medidas }}</td>
+                    <td>{{ producto.unidades_x_caja }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <button type="submit">Eliminar Duplicados</button>
+    </form>
+</body>
+</html>

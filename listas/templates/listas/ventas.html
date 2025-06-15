@@ -1,0 +1,132 @@
+{% extends '../home/base.html' %}
+{% load static %}
+
+{% block extra_head %}
+    <title>Ventas</title>
+    <link rel="stylesheet" href="{% static 'listas/ventas.css' %}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        /* Estilo para grupo de categorías */
+        #opciones_categoria {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        #opciones_categoria label {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        /* Custom radio naranja */
+        input[type="radio"], input[type="checkbox"].categoria-checkbox {
+            appearance: none;
+            width: 1rem;
+            height: 1rem;
+            border: 2px solid #ccc;
+            border-radius: 50%;
+            display: inline-grid;
+            place-content: center;
+            background-color: white;
+            cursor: pointer;
+            position: relative;
+        }
+
+        input[type="radio"]::before, input[type="checkbox"].categoria-checkbox::before {
+            content: "";
+            width: 0.5rem;
+            height: 0.5rem;
+            border-radius: 50%;
+            background-color: #f6570e;
+            transform: scale(0);
+            transition: 120ms transform ease-in-out;
+        }
+
+        input[type="radio"]:checked::before, input[type="checkbox"].categoria-checkbox:checked::before {
+            transform: scale(1);
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Exportar Lista de precios</h1>
+
+    <div id="opciones_categoria">
+        <label>Categorías:</label>
+        {% for categoria in categorias %}
+            <label>
+                <input type="checkbox" class="categoria-checkbox" value="{{ categoria }}">
+                {{ categoria }}
+            </label>
+        {% endfor %}
+    </div>
+
+    <h2>Composición de Precio</h2>
+    <div>
+        <label for="cotizacion_dolar">Cotización del Dólar:</label>
+        <input type="number" id="cotizacion_dolar" step="0.01" value="1.00">
+        <table id="precio_composicion">
+            <thead>
+                <tr>
+                    <th>Categoría</th>
+                    <th>Descuento (%)</th>
+                    <th>Descuento Adicional (%)</th>
+                    <th>Margen de Ganancia (%)</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <h2>Lista de Precios</h2>
+    <div class="botonera_ventas">
+        <form id="exportar_pdf_form" method="post" action="{% url 'exportar_pdf' %}">
+            {% csrf_token %}
+            <input type="hidden" id="cotizacion_dolar_hidden" name="cotizacion_dolar_hidden" value="">
+            <button type="submit" id="exportar_pdf">Exportar PDF</button>
+        </form>
+        <form method="get" action="{% url 'exportar_csv' %}">
+            <button type="submit">Exportar CSV</button>
+        </form>
+    </div>
+
+    <div class="table-wrapper">
+        <table id="lista_precios">
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Producto</th>
+                    <th>Precio Base (USD)</th>
+                    <th>Precio Final (Pesos)</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <table style="display:none;">
+        {% for producto in productos %}
+        <tr class="producto-row" data-categoria="{{ producto.categoria }}">
+            <td>{{ producto.codigo }}</td>
+            <td>{{ producto.producto }}</td>
+            <td class="precio">{{ producto.precio_unidad }}</td>
+            <td class="precio_final"></td>
+            <input type="hidden" class="id" value="{{ producto.id }}">
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+    <script>
+        window.COTIZACION_URL = "{% url 'cotizacion_dolar_api' %}";
+    </script>
+    <script src="{% static 'listas/ventas.js' %}"></script>
+{% endblock %}

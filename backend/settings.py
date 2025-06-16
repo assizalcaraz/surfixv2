@@ -2,13 +2,16 @@ from pathlib import Path
 from decouple import config, Csv
 import os
 
+AUTH_USER_MODEL = 'login.CustomUser'
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'index'
+LOGOUT_REDIRECT_URL = 'login'
+
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 SECRET_KEY = config("DJANGO_SECRET_KEY", default="insegura-en-dev")
-
 DEBUG = config("DEBUG", default=True, cast=bool)
-
 ALLOWED_HOSTS = config("DJANGO_ALLOWED_HOSTS", cast=Csv())  # <-- con paréntesis
+
 
 # Aplicaciones
 INSTALLED_APPS = [
@@ -84,7 +87,8 @@ USE_TZ = True
 # Archivos estáticos
 
 STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_DIRS = [BASE_DIR / 'static']
+
 
 # Solo para entorno de desarrollo
 if DEBUG:

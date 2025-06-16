@@ -19,6 +19,11 @@ from weasyprint import HTML, CSS
 from .models import Producto
 import requests
 
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def ventas(request):
+    ...
 
 
 
@@ -70,6 +75,7 @@ omit_values = [
     "mail: pedidosventas@faipsa.com"
 ]
 
+@login_required
 def upload_file(request):
     if request.method == 'POST':
         if 'excel_file' in request.FILES:
@@ -89,7 +95,7 @@ def upload_file(request):
 
     return render(request, 'listas/upload.html')
 
-
+@login_required
 def validate_headers(request):
     if request.method == 'POST':
         df = pd.DataFrame(request.session['df'])
@@ -164,6 +170,7 @@ def validate_headers(request):
             # Mostrar un mensaje de error más detallado
             return JsonResponse({'error': 'No se encontraron encabezados válidos. Asegúrese de que el archivo contenga los encabezados correctos.'})
 
+@login_required
 def validate_header(request):
     if request.method == 'POST':
         header = request.POST['header']
@@ -326,6 +333,7 @@ def configurar_listas(request):
     productos_nombres = Producto.objects.values_list('producto', flat=True).distinct()
     return render(request, 'listas/configurar_listas.html', {'productos': productos, 'categorias': categorias, 'productos_nombres': productos_nombres})
 
+@login_required
 @csrf_protect
 def asignar_categoria(request):
     if request.method == "POST":
@@ -349,6 +357,7 @@ def asignar_producto(request):
         return JsonResponse({"success": True})
     return JsonResponse({"success": False})
 
+@login_required
 def ventas(request):
     productos = Producto.objects.all()
     categorias = Producto.objects.values_list('categoria', flat=True).distinct()
@@ -356,7 +365,6 @@ def ventas(request):
         'productos': productos,
         'categorias': categorias,
     })
-
 
 
 def link_callback(uri, rel):
@@ -401,6 +409,8 @@ class ExportarPDFView(View):
             'productos': productos_data,
             'fecha': datetime.date.today().strftime("%d/%m/%Y"),
             'cotizacion_dolar': cotizacion_dolar,
+            'user': request.user,  # <--- esto es lo clave
+
         }
 
         html_string = render_to_string('listas/plantilla_pdf.html', context)

@@ -1,0 +1,150 @@
+@page {
+    size: A4;
+    margin: 10mm; /* Reduce los márgenes de la página */
+}
+
+
+/* General */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    color: #333;
+    background: linear-gradient(109.6deg, rgb(36, 45, 57) 11.2%, rgb(16, 37, 60) 51.2%, rgb(0, 0, 0) 98.6%);
+
+
+}
+
+/* Header */
+.header {
+    position: relative;
+    width: 100%;
+    padding: 20px;
+    background-color: #162b6400;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/* Main Container */
+.main-container {
+    margin: 20px auto;
+    padding: 20px;
+    width: 1000px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Search Bar */
+.search-bar {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    position: relative;
+}
+.search-bar input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+.search-bar input:focus {
+    outline: none;
+    border-color: #60a5fa;
+    box-shadow: 0 0 5px rgba(96, 165, 250, 0.5);
+}
+.search-bar button {
+    padding: 10px 20px;
+    margin-left: 10px;
+    background-color: #1e3a8a;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+.search-bar button:hover {
+    background-color: #16437a;
+}
+
+/* Suggestions Dropdown */
+#suggestions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: white;
+    border: 1px solid #ddd;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1000;
+    width: 100%;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+}
+.suggestion-item {
+    padding: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #333;
+    border-bottom: 1px solid #eee;
+}
+.suggestion-item:hover {
+    background-color: #f0f0f0;
+}
+.suggestion-item:last-child {
+    border-bottom: none;
+}
+
+/* Table */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background: linear-gradient(to bottom, #1e3a8a, #60a5fa); /* Rotar el degradado */
+    color: white;
+    font-weight: bold;
+}
+
+.producto {
+    width: 60%;
+}
+
+.grano, .litros, .cantidad_x_caja, .precio_pesos {
+    width: 65px;
+}
+
+/* Totals */
+.total-container {
+    text-align: right;
+    margin-top: 20px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+/* Button */
+button {
+    background-color: #1e3a8a;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+}
+button:hover {
+    background-color: #16437a;
+}

@@ -1,0 +1,95 @@
+@page {
+    size: A4;
+    margin: 10mm;
+}
+
+/* General */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+}
+
+/* Header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: #f4f4f4;
+    border-bottom: 1px solid #ddd;
+}
+
+.header .logo img {
+    width: 100px;
+    height: auto;
+}
+
+.header .info {
+    text-align: right;
+    font-size: 12px;
+}
+
+.header .info p {
+    margin: 3px 0;
+    
+}
+
+/* Main Container */
+.main-container {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 10px;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    height: calc(100% - 120px); /* Asegura espacio para el header */
+    box-sizing: border-box;
+}
+
+/* Table */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    font-size: 13px; /* Reducir el tamaño para que ocupe menos espacio */
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 6px; /* Reducir padding */
+    text-align: left;
+}
+
+th {
+    background: linear-gradient(#1e3a8a, #60a5fa);
+    color: white;
+    font-weight: bold;
+}
+
+.producto {
+    width: 800px; /* Reducir ancho para ajustar la tabla */
+}
+
+.grano, .litros, .cantidad_x_caja, .precio_pesos, .cantidad, .subtotal {
+    width: 100px;
+    text-align: center;
+}
+
+/* Total */
+.total {
+    margin-top: auto;
+    text-align: right;
+    font-size: 14px;
+    font-weight: bold;
+    border-top: 2px solid #ddd;
+    padding: 10px 0;
+    page-break-inside: avoid; /* Evitar que se parta en dos páginas */
+}

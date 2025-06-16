@@ -1,0 +1,96 @@
+@page {
+    size: A4;
+    margin: 10mm; /* Reduce los márgenes de la página */
+}
+
+/* General */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.header {
+    position: relative;
+    width: 100%;
+    height: auto;
+    padding: 10px;
+    overflow: hidden; /* Limitar patrones al área del header */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+}
+.logo{
+    width: auto;
+    height: auto;
+}
+.info2 {
+    font-size: 14px;
+}
+
+/* Patrones */
+.guarda {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0; /* Detrás del contenido del header */
+}
+
+.pattern-1,
+.pattern-2,
+.pattern-3 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    opacity: 0.1; /* Ajusta la opacidad para mayor sutileza */
+}
+
+/* Asegurar que el contenido del header esté encima de los patrones */
+.logo, .info {
+    position: relative;
+    z-index: 1;
+}
+
+/* Main Container */
+.main-container {
+    margin-top: 15px;
+    margin: 0px auto;
+    width: 100%;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Table */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0;
+    font-size: 14px;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background: linear-gradient(180deg, rgba(252, 252, 252, 1) 0%, rgba(255, 191, 136, 1) 25%, rgba(255, 66, 0, 1) 100%);
+    color: white;
+    font-weight: bold;
+}
+
+.producto{
+    width: 60%;
+}
+.grano, .litros, .cantidad_x_caja, .precio_pesos {
+    width: 65px;
+}

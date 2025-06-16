@@ -1,0 +1,132 @@
+/* Contenedor principal */
+.container {
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+/* Tabla */
+table {
+    width: 100%; /* Asegura que la tabla ocupe todo el ancho del contenedor */
+    border-collapse: collapse;
+    table-layout: fixed; /* Fuerza que las celdas ocupen un tamaño fijo proporcional */
+}
+
+th, td {
+    padding: 10px;
+    border: 1px solid #e0e0e0;
+    text-align: left;
+    font-size: 15px;
+    overflow: hidden; /* Oculta el contenido desbordado */
+    text-overflow: ellipsis; /* Añade puntos suspensivos si el contenido es muy largo */
+    white-space: nowrap; /* Evita que el contenido se rompa en varias líneas */
+}
+
+/* Encabezado de tabla */
+th {
+    background: linear-gradient(180deg, rgba(252, 252, 252, 1) 0%, rgba(255, 191, 136, 1) 25%, rgba(255, 66, 0, 1) 100%);
+    color: #ffffff;
+    text-align: left;
+    font-size: 16px;
+}
+
+/* Filas alternas de la tabla */
+tr:nth-child(even) {
+    background-color: #f1f5f9; /* Fila con color de fondo más claro */
+}
+
+tr:nth-child(odd) {
+    background-color: #ffffff; /* Fila con color de fondo blanco */
+}
+
+/* Botones de exportación */
+.export-buttons {
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-start;
+    gap: 10px;
+}
+
+.export-buttons button {
+    padding: 10px 15px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    background-color: #1e3a8a;
+    color: #ffffff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.export-buttons button:hover {
+    background-color: #60a5fa;
+}
+
+/* Selector de categorías */
+.category-selector {
+    margin-bottom: 20px;
+}
+
+/* Botonera de exportación */
+.botonera_ventas {
+    display: flex;
+    margin: 10px;
+}
+
+/* Asegura que las columnas de la tabla ocupen el espacio proporcional */
+.table-wrapper {
+    overflow-x: auto; /* Habilita el desplazamiento horizontal si es necesario */
+}
+
+#precio_composicion {
+    margin-top: 10px;
+}
+
+
+/* Estilo para grupo de categorías */
+#opciones_categoria {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+#opciones_categoria label {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+/* Custom radio naranja */
+input[type="radio"] {
+    appearance: none;
+    width: 1rem;
+    height: 1rem;
+    border: 2px solid #ccc;
+    border-radius: 50%;
+    display: inline-grid;
+    place-content: center;
+    background-color: white;
+    cursor: pointer;
+    position: relative;
+}
+
+input[type="radio"]::before {
+    content: "";
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background-color: #f6570e;
+    transform: scale(0);
+    transition: 120ms transform ease-in-out;
+}
+
+input[type="radio"]:checked::before {
+    transform: scale(1);
+}

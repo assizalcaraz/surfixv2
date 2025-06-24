@@ -1,3 +1,51 @@
+/* 🔶 Personalización de Bootstrap con color naranja */
+:root {
+    --bs-primary: #ff4200;
+    --bs-primary-rgb: 255, 66, 0;
+}
+
+/* Botones primarios */
+.btn-primary {
+    background-color: #ff4200;
+    border-color: #ff4200;
+    color: #fff;
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active {
+    background-color: #e03a00;
+    border-color: #d03900;
+    color: #fff;
+}
+
+/* Inputs activos y enfocados */
+.form-control:focus,
+.form-select:focus {
+    border-color: #ff4200;
+    box-shadow: 0 0 0 0.2rem rgba(255, 66, 0, 0.25);
+}
+
+/* Links activos o destacados */
+a {
+    color: #ff4200;
+}
+
+a:hover {
+    color: #cc3700;
+    text-decoration: underline;
+}
+
+/* Bordes y focos de campos */
+input:focus,
+textarea:focus,
+select:focus {
+    border-color: #ff4200;
+    outline: none;
+    box-shadow: 0 0 0 0.2rem rgba(255, 66, 0, 0.25);
+}
+
+/* Estilo general */
 body {
     margin: 0;
     padding: 0;
@@ -16,6 +64,7 @@ nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
 }
 
 nav h1 {
@@ -29,6 +78,7 @@ nav ul {
     gap: 1rem;
     margin: 0;
     padding: 0;
+    flex-wrap: wrap;
 }
 
 nav ul li a {
@@ -45,7 +95,6 @@ nav ul li a:hover {
 .logo {
     width: 420px;
     display: block;
-    
 }
 
 main {
@@ -59,4 +108,43 @@ footer {
     font-size: 0.9rem;
     color: #555;
     margin-top: 2rem;
+}
+
+/* 🔽 Ajustes para pantallas pequeñas */
+@media (max-width: 600px) {
+    body {
+        font-size: 18px;
+    }
+
+    nav {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    nav h1 {
+        font-size: 1.25rem;
+        margin-bottom: 1rem;
+    }
+
+    nav ul {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    nav ul li a {
+        font-size: 1.1rem;
+    }
+
+    .logo {
+        width: 100%;
+        max-width: 280px;
+    }
+
+    main {
+        padding: 1rem;
+    }
+
+    footer {
+        font-size: 1rem;
+    }
 }

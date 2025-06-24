@@ -12,7 +12,6 @@ SECRET_KEY = config("DJANGO_SECRET_KEY", default="insegura-en-dev")
 DEBUG = config("DEBUG", default=True, cast=bool)
 ALLOWED_HOSTS = config("DJANGO_ALLOWED_HOSTS", cast=Csv())  # <-- con paréntesis
 
-
 # Aplicaciones
 INSTALLED_APPS = [
     'django.contrib.admin',

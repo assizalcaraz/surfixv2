@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     'cmr',
     'cobranza',
     'home',
+    'presupuestos',	
 ]
 
 MIDDLEWARE = [
@@ -78,6 +79,13 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://surfix.store',
+    'https://www.surfix.store',
+    'https://ofi.surfix.store',
+    'https://www.ofi.surfix.store',
+]
+
 LANGUAGE_CODE = 'es-ar'
 TIME_ZONE = 'America/Argentina/Buenos_Aires'
 USE_I18N = True
@@ -86,11 +94,9 @@ USE_TZ = True
 # Archivos estáticos
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / 'static']
 
-
-# Solo para entorno de desarrollo
 if DEBUG:
     STATICFILES_DIRS = [BASE_DIR / "static"]
+else:
+    STATIC_ROOT = BASE_DIR / "staticfiles"
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

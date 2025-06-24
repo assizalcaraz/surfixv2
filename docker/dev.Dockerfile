@@ -5,7 +5,6 @@ ENV PYTHONUNBUFFERED 1
 
 WORKDIR /app
 
-# Dependencias del sistema para desarrollo (incluye soporte para weasyprint)
 RUN apt-get update && apt-get install -y \
     build-essential \
     libpango-1.0-0 \

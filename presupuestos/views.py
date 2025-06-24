@@ -10,7 +10,10 @@ import os
 import datetime
 from listas.models import Producto
 import json
+from django.contrib.auth.decorators import login_required
 
+
+@login_required
 def presupuesto_home(request):
     return render(request, 'presupuestos/presupuesto.html')
 
@@ -93,37 +96,31 @@ def exportar_csv(request):
 class ExportarPresupuestoPDFView(View):
     def post(self, request, *args, **kwargs):
         try:
-            # Recuperar cotización del dólar
             cotizacion_dolar = Decimal(request.POST.get('cotizacion_dolar_hidden', '1.0').replace(',', '.'))
         except (InvalidOperation, AttributeError):
             cotizacion_dolar = Decimal('1.0')
 
         try:
-            # Recuperar margen de ganancia global
             margen_ganancia_global = Decimal(request.POST.get('margen_ganancia_hidden', '0').replace(',', '.'))
         except (InvalidOperation, AttributeError):
             margen_ganancia_global = Decimal('0')
 
         productos_json = request.POST.get('productos', '[]')
-        print(f"Datos enviados en POST: {request.POST}")  # Depuración de datos enviados
-        productos = json.loads(productos_json)  # Deserializar JSON
-        print(f"Productos recibidos: {productos}")  # Depuración de productos deserializados
+        print(f"Datos enviados en POST: {request.POST}")
+        productos = json.loads(productos_json)
+        print(f"Productos recibidos: {productos}")
 
         productos_data = []
         total = Decimal('0.0')
 
         for producto in productos:
             try:
-                # Consultar en la base de datos para obtener los atributos faltantes
                 producto_db = Producto.objects.get(id=producto.get('id'))
                 cantidad = int(producto.get('cantidad', 1))
-                precio_unitario = Decimal(producto.get('precioUnitario').replace(',', '.'))  # Precio desde la vista
+                precio_unitario = Decimal(producto.get('precioUnitario').replace(',', '.'))
                 subtotal = precio_unitario * cantidad
-
-                # Incrementar el total acumulado
                 total += subtotal
 
-                # Preparar datos combinados de la base de datos y la vista
                 productos_data.append({
                     'producto': producto_db.producto,
                     'medidas': producto_db.medidas or (
@@ -138,20 +135,25 @@ class ExportarPresupuestoPDFView(View):
                     'subtotal': "{:,.2f}".format(subtotal).replace('.', 'X').replace(',', '.').replace('X', ','),
                 })
             except (Producto.DoesNotExist, KeyError, InvalidOperation, ValueError) as e:
-                print(f"Error procesando producto: {producto}. Error: {e}")  # Depuración
+                print(f"Error procesando producto: {producto}. Error: {e}")
                 continue
 
-        print(f"Productos procesados para PDF: {productos_data}")  # Depuración
+        print(f"Productos procesados para PDF: {productos_data}")
 
-        # Contexto para la plantilla
+        # Datos del usuario
+        user = request.user
+        user_nombre = user.get_full_name() or user.username
+        user_celular = getattr(user, 'celular', 'No especificado')
+
         context = {
             'productos': productos_data,
             'fecha': datetime.date.today().strftime("%d/%m/%Y"),
             'fecha_vencimiento': (datetime.date.today() + datetime.timedelta(days=10)).strftime("%d/%m/%Y"),
             'total': "{:,.2f}".format(total).replace('.', 'X').replace(',', '.').replace('X', ','),
+            'user_nombre': user_nombre,
+            'user_celular': user_celular,
         }
 
-        # Renderizar HTML y generar PDF
         html_string = render_to_string('presupuestos/plantilla_presupuesto_pdf.html', context)
         css_path = os.path.join(settings.BASE_DIR, 'static/presupuestos/plantilla_presupuesto_pdf.css')
         html = HTML(string=html_string, base_url=request.build_absolute_uri('/'))

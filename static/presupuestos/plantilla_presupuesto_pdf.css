@@ -20,10 +20,10 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 20px;
-    background-color: #fdf2ec; /* tono suave asociado a la paleta naranja */
+    background-color: #fdf2ec;
     border-bottom: 1px solid #ddd;
+    position: relative;
 }
-
 .header .logo img {
     width: 100px;
     height: auto;
@@ -31,7 +31,7 @@ body {
 
 .header .info {
     text-align: right;
-    font-size: 12px;
+    font-size: 9px;
 }
 
 .header .info p {
@@ -90,4 +90,19 @@ th {
     border-top: 2px solid #ddd;
     padding: 10px 0;
     page-break-inside: avoid;
+}
+
+
+
+.titulo-presupuesto {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 20px;
+    font-weight: bold;
+    color: #ff4200;
+    text-shadow: 1px 1px 1px #ffbf88;
+    letter-spacing: 2px;
+    white-space: nowrap;
 }

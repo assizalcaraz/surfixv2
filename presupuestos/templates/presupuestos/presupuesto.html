@@ -2,7 +2,9 @@
 {% load static %}
 
 {% block extra_head %}
-    <title>Presupuesto - Plenor</title>
+{% csrf_token %}
+
+    <title>Presupuestos</title>
     <link rel="stylesheet" href="{% static 'presupuestos/presupuesto.css' %}?{{ STATIC_TIMESTAMP }}">
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

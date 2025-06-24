@@ -148,3 +148,50 @@ footer {
         font-size: 1rem;
     }
 }
+
+
+/* controles.css */
+
+#opciones_categoria {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+#opciones_categoria label {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+/* Custom radio naranja */
+input[type="radio"], input[type="checkbox"].categoria-checkbox {
+    appearance: none;
+    width: 1rem;
+    height: 1rem;
+    border: 2px solid #ccc;
+    border-radius: 50%;
+    display: inline-grid;
+    place-content: center;
+    background-color: white;
+    cursor: pointer;
+    position: relative;
+}
+
+input[type="radio"]::before, input[type="checkbox"].categoria-checkbox::before {
+    content: "";
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background-color: #f6570e;
+    transform: scale(0);
+    transition: 120ms transform ease-in-out;
+}
+
+input[type="radio"]:checked::before, input[type="checkbox"].categoria-checkbox:checked::before {
+    transform: scale(1);
+}

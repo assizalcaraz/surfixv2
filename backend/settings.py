@@ -2,7 +2,6 @@ from pathlib import Path
 from decouple import config, Csv
 import os
 
-
 AUTH_USER_MODEL = 'login.CustomUser'
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'index'
@@ -11,20 +10,7 @@ LOGOUT_REDIRECT_URL = 'login'
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config("DJANGO_SECRET_KEY", default="insegura-en-dev")
 DEBUG = config("DEBUG", default=True, cast=bool)
-ALLOWED_HOSTS = config("DJANGO_ALLOWED_HOSTS", cast=Csv())
-
-CSRF_TRUSTED_ORIGINS = [
-    'https://ofi.surfix.store',
-    'https://www.surfix.store',
-    'https://surfix.store',
-]
-
-
-# Static files configuration
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-# Uncomment this only if you have custom static folders outside apps
-# STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+ALLOWED_HOSTS = config("DJANGO_ALLOWED_HOSTS", cast=Csv())  # <-- con paréntesis
 
 # Aplicaciones
 INSTALLED_APPS = [
@@ -57,7 +43,7 @@ ROOT_URLCONF = 'backend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [],  # opcional si vas a usar plantillas globales
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -70,16 +56,41 @@ TEMPLATES = [
     },
 ]
 
+WSGI_APPLICATION = 'backend.wsgi.application'
+
+# Base de datos
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config("POSTGRES_DB"),
-        'USER': config("POSTGRES_USER"),
-        'PASSWORD': config("POSTGRES_PASSWORD"),
-        'HOST': config("POSTGRES_HOST", default='db'),
-        'PORT': config("POSTGRES_PORT", default='5432'),
+        'NAME': config('POSTGRES_DB', default='surfix'),
+        'USER': config('POSTGRES_USER', default='surfix_user'),
+        'PASSWORD': config('POSTGRES_PASSWORD', default='surfix_pass'),
+        'HOST': config('POSTGRES_HOST', default='localhost'),
+        'PORT': config('POSTGRES_PORT', default='5432'),
     }
 }
 
+# Validación de contraseñas
+AUTH_PASSWORD_VALIDATORS = [
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
+]
 
-WSGI_APPLICATION = 'backend.wsgi.application'
+LANGUAGE_CODE = 'es-ar'
+TIME_ZONE = 'America/Argentina/Buenos_Aires'
+USE_I18N = True
+USE_TZ = True
+
+# Archivos estáticos
+
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [BASE_DIR / 'static']
+
+
+# Solo para entorno de desarrollo
+if DEBUG:
+    STATICFILES_DIRS = [BASE_DIR / "static"]
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

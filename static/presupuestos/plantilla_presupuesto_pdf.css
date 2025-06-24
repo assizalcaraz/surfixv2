@@ -20,7 +20,7 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 20px;
-    background-color: #f4f4f4;
+    background-color: #fdf2ec; /* tono suave asociado a la paleta naranja */
     border-bottom: 1px solid #ddd;
 }
 
@@ -36,7 +36,6 @@ body {
 
 .header .info p {
     margin: 3px 0;
-    
 }
 
 /* Main Container */
@@ -49,9 +48,8 @@ body {
     background-color: #ffffff;
     border: 1px solid #ddd;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    height: calc(100% - 120px); /* Asegura espacio para el header */
     box-sizing: border-box;
+    height: calc(100% - 120px);
 }
 
 /* Table */
@@ -59,23 +57,23 @@ table {
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 20px;
-    font-size: 13px; /* Reducir el tamaño para que ocupe menos espacio */
+    font-size: 13px;
 }
 
 th, td {
     border: 1px solid #ddd;
-    padding: 6px; /* Reducir padding */
+    padding: 6px;
     text-align: left;
 }
 
 th {
-    background: linear-gradient(#1e3a8a, #60a5fa);
-    color: white;
+    background: linear-gradient(180deg, #fdfdfd 0%, #ffbf88 25%, #ff4200 100%);
+    color: #ffffff;
     font-weight: bold;
 }
 
 .producto {
-    width: 800px; /* Reducir ancho para ajustar la tabla */
+    width: 800px;
 }
 
 .grano, .litros, .cantidad_x_caja, .precio_pesos, .cantidad, .subtotal {
@@ -91,5 +89,5 @@ th {
     font-weight: bold;
     border-top: 2px solid #ddd;
     padding: 10px 0;
-    page-break-inside: avoid; /* Evitar que se parta en dos páginas */
+    page-break-inside: avoid;
 }

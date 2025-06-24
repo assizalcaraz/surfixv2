@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <title>Presupuesto</title>
+    <link rel="stylesheet" href="{% static 'presupuestos/plantilla_presupuesto_pdf.css' %}">
+</head>
+<body>
+    <div class="header">
+        <!-- Logo -->
+        <div class="logo">
+            <img src="file:///app/static/home/img/surfix.png" alt="Logo" style="width: 100px; height: auto;">
+        </div>
+
+        <!-- Elementos decorativos opcionales -->
+        <div class="guarda">
+            <div class="pattern-1"></div>
+            <div class="pattern-2"></div>
+            <div class="pattern-3"></div>
+        </div>
+
+        <!-- Info del presupuesto -->
+        <div class="info">
+            <p><b>Fecha de emisión:</b> {{ fecha }}</p>
+            <p><b>Fecha de vencimiento:</b> {{ fecha_vencimiento }}</p>
+            {% if user.is_authenticated %}
+                <p><b>Representante:</b> {{ user.get_full_name }}</p>
+                <p><b>Whatsapp:</b> {{ user.celular }}</p>
+            {% else %}
+                <p><b>Representante:</b> Usuario invitado</p>
+                <p><b>Whatsapp:</b> No disponible</p>
+            {% endif %}
+            <p>Precio expresado en Pesos Argentinos sin i.v.a</p>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Medidas</th>
+                    <th>Grano</th>
+                    <th>Litros</th>
+                    <th>Uni./caja</th>
+                    <th>Cantidad</th>
+                    <th>Precio Unitario</th>
+                    <th>Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for producto in productos %}
+                <tr>
+                    <td>{{ producto.producto }}</td>
+                    <td>{{ producto.medidas|default_if_none:"" }}</td>
+                    <td>{{ producto.grano|default_if_none:"" }}</td>
+                    <td>{{ producto.litros|default_if_none:"" }}</td>
+                    <td>{{ producto.unidades_x_caja }}</td>
+                    <td>{{ producto.cantidad }}</td>
+                    <td>{{ producto.precio_pesos }}</td>
+                    <td>{{ producto.subtotal }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="total">
+            <p><b>Total:</b> ${{ total }}</p>
+        </div>
+    </div>
+</body>
+</html>

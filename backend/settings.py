@@ -2,6 +2,9 @@ from pathlib import Path
 from decouple import config, Csv
 import os
 
+
+
+
 AUTH_USER_MODEL = 'login.CustomUser'
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'index'
@@ -11,6 +14,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config("DJANGO_SECRET_KEY", default="insegura-en-dev")
 DEBUG = config("DEBUG", default=True, cast=bool)
 ALLOWED_HOSTS = config("DJANGO_ALLOWED_HOSTS", cast=Csv())  # <-- con paréntesis
+
+from django.utils.timezone import now
+STATIC_TIMESTAMP = int(now().timestamp()) if DEBUG else ''
 
 # Aplicaciones
 INSTALLED_APPS = [
@@ -26,6 +32,7 @@ INSTALLED_APPS = [
     'cmr',
     'cobranza',
     'home',
+    'presupuestos',
 ]
 
 MIDDLEWARE = [
@@ -51,6 +58,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'backend.context_processors.static_timestamp',
+
             ],
         },
     },
@@ -83,14 +92,10 @@ TIME_ZONE = 'America/Argentina/Buenos_Aires'
 USE_I18N = True
 USE_TZ = True
 
-# Archivos estáticos
-
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / 'static']
 
-
-# Solo para entorno de desarrollo
 if DEBUG:
     STATICFILES_DIRS = [BASE_DIR / "static"]
-
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+    STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
+else:
+    STATIC_ROOT = BASE_DIR / "staticfiles"

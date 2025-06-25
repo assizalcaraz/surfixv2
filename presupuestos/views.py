@@ -13,7 +13,6 @@ from django.contrib.auth.decorators import login_required
 from listas.models import Producto
 
 
-
 def calcular_precio_final_completo(precio_base_usd, cotizacion_dolar, margen, dto1, dto2):
     precio = precio_base_usd * (1 - dto1 / 100)
     precio *= (1 - dto2 / 100)
@@ -23,7 +22,8 @@ def calcular_precio_final_completo(precio_base_usd, cotizacion_dolar, margen, dt
 
 @login_required
 def presupuesto_home(request):
-    return render(request, 'presupuestos/presupuesto.html')
+    categorias = Producto.objects.values_list('categoria', flat=True).distinct()
+    return render(request, 'presupuestos/presupuesto.html', {'categorias': categorias})
 
 
 class PrevisualizarPDFView(View):
@@ -67,7 +67,9 @@ def buscar_producto(request):
                 'precio_unidad': p.precio_unidad,
                 'grano': p.grano or '',
                 'litros': p.litros or '',
-                'medidas': p.medidas or ''
+                'medidas': p.medidas or '',
+                'categoria': p.categoria or '',
+                'ancho': p.ancho or 0,
             }
             for p in productos
         ]

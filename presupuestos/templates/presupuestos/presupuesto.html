@@ -6,223 +6,79 @@
 
     <title>Presupuestos</title>
     <link rel="stylesheet" href="{% static 'presupuestos/presupuesto.css' %}?{{ STATIC_TIMESTAMP }}">
-
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            function actualizarCotizacionDolar() {
-                fetch("{% url 'cotizacion_dolar_api' %}")
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.cotizacion) {
-                            $("#cotizacion_dolar").val(data.cotizacion);
-                        } else {
-                            console.error("Error al obtener la cotización del dólar:", data.error);
-                        }
-                    })
-                    .catch(error => console.error("Error en la solicitud de cotización:", error));
-            }
-            actualizarCotizacionDolar();
-
-            $("#product-search").on("input", function () {
-                const query = $(this).val();
-                if (query.length > 2) {
-                    $.getJSON(`/presupuestos/buscar_producto/?q=${query}`, function (data) {
-                        let suggestions = "";
-                        data.forEach(function (producto) {
-                            suggestions += `
-                                <div class="suggestion-item" 
-                                    data-id="${producto.id}" 
-                                    data-nombre="${producto.nombre}" 
-                                    data-precio="${producto.precio_unidad}" 
-                                    data-grano="${producto.grano}" 
-                                    data-litros="${producto.litros}" 
-                                    data-medidas="${producto.medidas}" 
-                                    data-codigo="${producto.codigo}" 
-                                    data-categoria="${producto.categoria}" 
-                                    data-formato="${producto.formato}">
-                                    <strong>${producto.nombre}</strong> (${producto.codigo})<br>
-                                    <small>
-                                        ${producto.formato ? `Formato: ${producto.formato}, ` : ""}
-                                        ${producto.categoria ? `Categoría: ${producto.categoria}, ` : ""}
-                                        ${producto.grano !== "N/A" ? `Grano: ${producto.grano}, ` : ""}
-                                        ${producto.litros !== "N/A" ? `Litros: ${producto.litros}, ` : ""}
-                                        ${producto.medidas !== "N/A" ? `Medidas: ${producto.medidas}` : ""}
-                                    </small>
-                                </div>`;
-                        });
-                        $("#suggestions").html(suggestions).show();
-                    }).fail(function () {
-                        $("#suggestions").html("<div class='error'>Error al buscar productos</div>").show();
-                    });
-                } else {
-                    $("#suggestions").hide();
-                }
-            });
-
-            $(document).on("click", ".suggestion-item", function () {
-                const id = $(this).data("id");
-                const nombre = $(this).data("nombre");
-                const precioBase = parseFloat($(this).data("precio")) || 0;
-                const cotizacion = parseFloat($("#cotizacion_dolar").val()) || 1;
-                const margenGanancia = parseFloat($("#margen-ganancia").val()) || 0;
-                const descuento = parseFloat($("#descuento-global").val()) || 0;
-                const descuentoAdicional = parseFloat($("#descuento-adicional").val()) || 0;
-
-                if (!precioBase || isNaN(precioBase)) {
-                    console.error("Precio base inválido:", precioBase);
-                    return;
-                }
-
-                let precio = precioBase * (1 - descuento / 100);
-                precio *= (1 - descuentoAdicional / 100);
-                precio *= (1 + margenGanancia / 100);
-                precio *= cotizacion;
-
-                const newRow = `
-                    <tr class="product-row" data-id="${id}">
-                        <td>${nombre}</td>
-                        <td><input type="number" class="cantidad" value="1" min="1"></td>
-                        <td class="precio-unitario" data-precio-base="${precioBase}">${precio.toFixed(2)}</td>
-                        <td class="subtotal">${precio.toFixed(2)}</td>
-                        <td><button class="remove-product">Eliminar</button></td>
-                    </tr>`;
-                $("#presupuesto-body").append(newRow);
-                $("#suggestions").hide();
-                $("#product-search").val("");
-                calcularTotal();
-            });
-
-            $(document).on("click", ".remove-product", function () {
-                $(this).closest("tr").remove();
-                calcularTotal();
-            });
-
-            $(document).on("input", ".cantidad, #margen-ganancia, #descuento-global, #descuento-adicional, #cotizacion_dolar", function () {
-                recalcularPrecios();
-            });
-
-            function recalcularPrecios() {
-                const cotizacion = parseFloat($("#cotizacion_dolar").val()) || 1;
-                const margenGanancia = parseFloat($("#margen-ganancia").val()) || 0;
-                const descuentoGlobal = parseFloat($("#descuento-global").val()) || 0;
-                const descuentoAdicional = parseFloat($("#descuento-adicional").val()) || 0;
-
-                $(".product-row").each(function () {
-                    const precioBase = parseFloat($(this).find(".precio-unitario").data("precio-base")) || 0;
-                    const cantidad = parseFloat($(this).find(".cantidad").val()) || 1;
-
-                    if (!precioBase || isNaN(precioBase)) {
-                        console.error("Precio base inválido en recalculo:", precioBase);
-                        return;
-                    }
-
-                    let precio = precioBase * (1 - descuentoGlobal / 100);
-                    precio *= (1 - descuentoAdicional / 100);
-                    precio *= (1 + margenGanancia / 100);
-                    precio *= cotizacion;
-
-                    const subtotal = precio * cantidad;
-                    $(this).find(".precio-unitario").text(precio.toFixed(2));
-                    $(this).find(".subtotal").text(subtotal.toFixed(2));
-                });
-
-                calcularTotal();
-            }
-
-            function calcularTotal() {
-                let total = 0;
-                $(".subtotal").each(function () {
-                    total += parseFloat($(this).text()) || 0;
-                });
-                $("#total").text(total.toFixed(2));
-            }
-
-            $("#form-presupuesto").on("submit", function (e) {
-                e.preventDefault();
-
-                const cotizacion = parseFloat($("#cotizacion_dolar").val()) || 1;
-                const margenGanancia = parseFloat($("#margen-ganancia").val()) || 0;
-                const descuentoAdicional = parseFloat($("#descuento-adicional").val()) || 0;
-
-                $("#cotizacion_dolar_hidden").val(cotizacion);
-                $("#margen_ganancia_hidden").val(margenGanancia);
-                $("#descuento_adicional_hidden").val(descuentoAdicional);
-
-                const productos = [];
-                $(".product-row").each(function () {
-                    const id = $(this).data("id");
-                    const nombre = $(this).find("td:first").text();
-                    const cantidad = $(this).find(".cantidad").val();
-                    const precioUnitario = $(this).find(".precio-unitario").text();
-                    const subtotal = $(this).find(".subtotal").text();
-
-                    productos.push({
-                        id,
-                        nombre,
-                        cantidad,
-                        precioUnitario,
-                        subtotal
-                    });
-                });
-
-                const productosField = $("<input>")
-                    .attr("type", "hidden")
-                    .attr("name", "productos")
-                    .val(JSON.stringify(productos));
-
-                $(this).append(productosField);
-                this.submit();
-            });
-        });
-    </script>
+    <script src="{% static 'presupuestos/presupuesto.js' %}?{{ STATIC_TIMESTAMP }}" defer></script>
 {% endblock %}
 
 {% block content %}
-    <div class="header">
-        <h1>Generar Presupuesto</h1>
+<div class="header">
+    <h1>Generar Presupuesto</h1>
+</div>
+
+<div class="main-container">
+    <div class="search-bar">
+        <input type="text" id="product-search" placeholder="Buscar producto...">
+        <div id="suggestions" class="suggestions"></div>
     </div>
 
-    <div class="main-container">
-        <div class="search-bar">
-            <input type="text" id="product-search" placeholder="Buscar producto...">
-            <div id="suggestions" class="suggestions"></div>
-        </div>
-
-        <div class="cotizacion-container">
-            <label for="cotizacion_dolar">Cotización del Dólar:</label>
-            <input type="text" id="cotizacion_dolar" readonly>
-            <label for="margen-ganancia">Margen de Ganancia (%):</label>
-            <input type="number" id="margen-ganancia" step="1" value="35">
-            <label for="descuento-global">Descuento Global (%):</label>
-            <input type="number" id="descuento-global" step="1" value="0">
-            <label for="descuento-adicional">Descuento Adicional (%):</label>
-            <input type="number" id="descuento-adicional" step="1" value="0">
-        </div>
-
-        <form id="form-presupuesto" method="post" action="{% url 'exportar_presupuesto' %}">
-            {% csrf_token %}
-            <input type="hidden" id="cotizacion_dolar_hidden" name="cotizacion_dolar_hidden" value="">
-            <input type="hidden" id="margen_ganancia_hidden" name="margen_ganancia_hidden" value="">
-            <input type="hidden" id="descuento_adicional_hidden" name="descuento_adicional_hidden" value="">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Producto</th>
-                        <th>Cantidad</th>
-                        <th>Precio Unitario</th>
-                        <th>Subtotal</th>
-                        <th>Acción</th>
-                    </tr>
-                </thead>
-                <tbody id="presupuesto-body">
-                    <!-- Filas generadas dinámicamente -->
-                </tbody>
-            </table>
-            <div class="total-container">
-                Total: $<span id="total">0.00</span>
-            </div>
-            <button type="submit" id="exportar-pdf">Exportar a PDF</button>
-        </form>
+    <div id="opciones_categoria">
+        <label>Categorías:</label>
+        {% for categoria in categorias %}
+            <label>
+                <input type="checkbox" class="categoria-checkbox" value="{{ categoria }}" checked>
+                {{ categoria }}
+            </label>
+        {% endfor %}
     </div>
+
+    <div class="cotizacion-container">
+        <label for="cotizacion_dolar">Cotización del Dólar:</label>
+        <input type="number" id="cotizacion_dolar" step="0.01" value="1.00">
+
+        <label for="descuento_global_extra">Descuento Global Extra (%):</label>
+        <input type="number" id="descuento_global_extra" step="1" value="0">
+    </div>
+
+    <h2>Composición de Precio</h2>
+    <table id="precio_composicion">
+        <thead>
+            <tr>
+                <th>Categoría</th>
+                <th>Descuento (%)</th>
+                <th>Descuento Adicional (%)</th>
+                <th>Margen de Ganancia (%)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Filas generadas dinámicamente por JS -->
+        </tbody>
+    </table>
+
+    <form id="form-presupuesto" method="post" action="{% url 'exportar_presupuesto' %}">
+        {% csrf_token %}
+        <input type="hidden" id="cotizacion_dolar_hidden" name="cotizacion_dolar_hidden" value="">
+        <input type="hidden" id="margen_ganancia_hidden" name="margen_ganancia_hidden" value="">
+        <input type="hidden" id="descuento_adicional_hidden" name="descuento_adicional_hidden" value="">
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Cantidad</th>
+                    <th>Precio Unitario</th>
+                    <th>Subtotal</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody id="presupuesto-body">
+                <!-- Filas generadas dinámicamente -->
+            </tbody>
+        </table>
+
+        <div class="total-container">
+            Total: $<span id="total">0.00</span>
+        </div>
+        <button type="submit" id="exportar-pdf">Exportar a PDF</button>
+    </form>
+</div>
 {% endblock %}

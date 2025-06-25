@@ -38,3 +38,6 @@ venv/
 
 # Otros
 *.zip
+
+# BACKUP DB 
+backup_surfix_*.sql

@@ -58,7 +58,7 @@ def generar_presupuesto(request):
 def buscar_producto(request):
     query = request.GET.get('q', '').strip()
     if query:
-        productos = Producto.objects.filter(producto__icontains=query)[:10]
+        productos = Producto.objects.filter(producto__icontains=query)[:30]
         data = [
             {
                 'id': p.id,

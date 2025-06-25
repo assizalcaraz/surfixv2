@@ -2,7 +2,7 @@ const COTIZACION_URL = window.COTIZACION_URL || "/cotizacion/";
 
 $(document).ready(function() {
     var valoresPorDefecto = {
-        "Abrasivos": { descuento: 67, descuento_adicional: 30, margen_ganancia: 35 },
+        "Abrasivos": { descuento: 67, descuento_adicional: 33.33, margen_ganancia: 35 },
         "Pintura": { descuento: 10, descuento_adicional: 0, margen_ganancia: 35 },
         "Fijador": { descuento: 10, descuento_adicional: 0, margen_ganancia: 35 },
         "Cintas Rapifix": { descuento: 67, descuento_adicional: 20, margen_ganancia: 35 },

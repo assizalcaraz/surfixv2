@@ -1,6 +1,47 @@
-# 📓 Bitácora SurfixV2
+# 📓 Bitácora SurfixV2.0.2
 
 > Registro cronológico de avances, decisiones y desvíos.
+
+## 2025-06-24 → 2025-06-25
+
+### ✅ Versión Surfix V2.0.2 — Lista de precios y presupuestador integrado
+
+* Integración de un **presupuestador interactivo** con capacidad para:
+  * Buscar productos desde la base de datos.
+  * Agregarlos dinámicamente al presupuesto.
+  * Ingresar cantidades y calcular automáticamente precios finales.
+  * Exportar el resultado a **PDF**.
+
+* Integración de módulo **"Composición de Precio"**:
+  * Sección desplegable (`<details>`) con:
+    * Cotización del dólar.
+    * Descuentos por categoría (Dto1 y Dto2).
+    * Margen de ganancia.
+    * Descuento global extra.
+  * Los valores modificables impactan dinámicamente en el precio final.
+
+* Mejoras visuales y de usabilidad:
+  * El buscador quedó **sticky** para mantenerse visible al hacer scroll.
+  * Reorganización del módulo de composición para diferenciarlo del listado.
+  * Agregado de columnas en la tabla para mostrar **grano** y **litros**.
+  * Corrección de diseño mobile: estructura más ordenada en pantallas pequeñas.
+
+### 🔎 Búsqueda de productos
+
+* Ampliación del límite de resultados de búsqueda de **10 a 25 productos**.
+* Inclusión de coincidencias por:
+  * `producto`
+  * `código`
+  * `categoría` (con uso de `Q(...)` de Django).
+* Verificado que productos como *"Lija Tela Esmeril Óxido de Aluminio"* ya aparecen al buscar por "esmeril", "tela", etc.
+
+### 🐛 Correcciones y ajustes técnicos
+
+* Solucionado problema donde el precio final no aplicaba descuentos ni márgenes (solo cotización).
+* Se aplican correctamente los ajustes por categoría al seleccionar productos.
+* Se incluyó fallback `"Sin categoría"` para productos sin categoría definida.
+* Corregida la recuperación de campos `grano` y `litros` desde el backend hacia el JS.
+
 
 ## 2025-06-16
 

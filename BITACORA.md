@@ -6,6 +6,13 @@
 
 ### ✅ Versión Surfix V2.0.2 — Lista de precios y presupuestador integrado
 
+- Se mejora el objetivo `make update-prod` para:
+  - Hacer backup automáticamente antes de reconstruir.
+  - Conservar solo el último backup, eliminando los anteriores.
+  - Restaurar el último dump luego del `down -v`.
+  - Ejecutar `collectstatic` tras el despliegue.
+
+
 * Integración de un **presupuestador interactivo** con capacidad para:
   * Buscar productos desde la base de datos.
   * Agregarlos dinámicamente al presupuesto.

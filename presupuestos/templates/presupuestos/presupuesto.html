@@ -2,8 +2,7 @@
 {% load static %}
 
 {% block extra_head %}
-{% csrf_token %}
-
+    {% csrf_token %}
     <title>Presupuestos</title>
     <link rel="stylesheet" href="{% static 'presupuestos/presupuesto.css' %}?{{ STATIC_TIMESTAMP }}">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -16,43 +15,12 @@
 </div>
 
 <div class="main-container">
-    <div class="search-bar">
-        <input type="text" id="product-search" placeholder="Buscar producto...">
-        <div id="suggestions" class="suggestions"></div>
+    <div class="sticky-top">
+        <div class="search-bar">
+            <input type="text" id="product-search" placeholder="Buscar producto...">
+            <div id="suggestions" class="suggestions"></div>
+        </div>
     </div>
-
-    <div id="opciones_categoria">
-        <label>Categorías:</label>
-        {% for categoria in categorias %}
-            <label>
-                <input type="checkbox" class="categoria-checkbox" value="{{ categoria }}" checked>
-                {{ categoria }}
-            </label>
-        {% endfor %}
-    </div>
-
-    <div class="cotizacion-container">
-        <label for="cotizacion_dolar">Cotización del Dólar:</label>
-        <input type="number" id="cotizacion_dolar" step="0.01" value="1.00">
-
-        <label for="descuento_global_extra">Descuento Global Extra (%):</label>
-        <input type="number" id="descuento_global_extra" step="1" value="0">
-    </div>
-
-    <h2>Composición de Precio</h2>
-    <table id="precio_composicion">
-        <thead>
-            <tr>
-                <th>Categoría</th>
-                <th>Descuento (%)</th>
-                <th>Descuento Adicional (%)</th>
-                <th>Margen de Ganancia (%)</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Filas generadas dinámicamente por JS -->
-        </tbody>
-    </table>
 
     <form id="form-presupuesto" method="post" action="{% url 'exportar_presupuesto' %}">
         {% csrf_token %}
@@ -64,6 +32,8 @@
             <thead>
                 <tr>
                     <th>Producto</th>
+                    <th>Grano</th>
+                    <th>Litros</th>
                     <th>Cantidad</th>
                     <th>Precio Unitario</th>
                     <th>Subtotal</th>
@@ -71,14 +41,41 @@
                 </tr>
             </thead>
             <tbody id="presupuesto-body">
-                <!-- Filas generadas dinámicamente -->
+                <!-- Productos agregados -->
             </tbody>
         </table>
+
+        <details class="config-panel">
+            <summary><strong>⚙️ Composición de Precio</strong></summary>
+            <div class="config-content">
+                <div class="cotizacion-container">
+                    <label for="cotizacion_dolar">Cotización del Dólar:</label>
+                    <input type="number" id="cotizacion_dolar" step="0.01" value="1.00">
+
+                    <label for="descuento_global_extra">Descuento Global Extra (%):</label>
+                    <input type="number" id="descuento_global_extra" step="1" value="0">
+                </div>
+
+                <table id="precio_composicion">
+                    <thead>
+                        <tr>
+                            <th>Categoría</th>
+                            <th>Descuento (%)</th>
+                            <th>Descuento Adicional (%)</th>
+                            <th>Margen de Ganancia (%)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Filas generadas por JS -->
+                    </tbody>
+                </table>
+            </div>
+        </details>
 
         <div class="total-container">
             Total: $<span id="total">0.00</span>
         </div>
-        <button type="submit" id="exportar-pdf">Exportar a PDF</button>
+        <button style="margin: 1px;" type="submit" id="exportar-pdf">Exportar a PDF</button>
     </form>
 </div>
 {% endblock %}

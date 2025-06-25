@@ -85,9 +85,12 @@ document.addEventListener("DOMContentLoaded", () => {
                                 data-precio="${producto.precio_unidad}" 
                                 data-ancho="${producto.ancho}" 
                                 data-unidades-x-caja="${unidadesXCaja}" 
-                                data-categoria="${producto.categoria}">
+                                data-categoria="${producto.categoria}"
+                                data-grano="${producto.grano}" 
+                                data-litros="${producto.litros}">
                                 <strong>${producto.nombre}</strong> - Código: ${producto.codigo}
                             </div>`;
+
                     });
                     document.getElementById("suggestions").innerHTML = suggestions;
                     document.getElementById("suggestions").style.display = "block";
@@ -109,6 +112,8 @@ document.addEventListener("DOMContentLoaded", () => {
             const ancho = parseInt(event.target.dataset.ancho) || 0;
             const unidadesXCaja = calcularUnidadesPorCaja(ancho);
             const categoria = event.target.dataset.categoria;
+            const grano = event.target.dataset.grano || "-";
+            const litros = event.target.dataset.litros || "-";
             const cotizacion = parseFloat(cotizacionInput.value) || 1;
             const ajustes = valoresPorDefecto[categoria] || { descuento: 0, descuento_adicional: 0, margen_ganancia: 0 };
 
@@ -120,6 +125,8 @@ document.addEventListener("DOMContentLoaded", () => {
             const newRow = `
                 <tr class="product-row" data-id="${id}" data-precio-base="${precioBase}" data-categoria="${categoria}">
                     <td>${nombre}</td>
+                    <td>${grano}</td>
+                    <td>${litros}</td>
                     <td><input type="number" class="cantidad" value="1" min="1"></td>
                     <td class="precio-unitario">${precio.toFixed(2)}</td>
                     <td class="subtotal">${precio.toFixed(2)}</td>

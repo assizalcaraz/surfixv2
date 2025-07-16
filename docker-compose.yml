@@ -1,6 +1,7 @@
 version: '3.9'
 services:
   web:
+    container_name: surfix_web  # ← añadido para upstream limpio
     build:
       context: .
       dockerfile: docker/prod.Dockerfile
@@ -22,10 +23,11 @@ services:
     env_file:
       - .env.prod
 
-
 volumes:
   postgres_data:
   static_volume:
+    external: true
+    name: surfix_v202_static_volume
 
 networks:
   reverse-proxy:

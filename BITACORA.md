@@ -60,8 +60,8 @@ ACTUALZIACION DE DOMIO
 
 * Configuración de **nginx** como proxy inverso con certificados SSL válidos mediante **Let's Encrypt** para:
 
-  * `surfix.store`
-  * `ofi.surfix.store`
+  * `surfix.ar`
+* `ofi.surfix.ar`
 
 * Configuración de:
 

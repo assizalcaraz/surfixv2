@@ -80,10 +80,10 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://surfix.store',
-    'https://www.surfix.store',
-    'https://ofi.surfix.store',
-    'https://www.ofi.surfix.store',
+    'https://surfix.ar',
+    'https://www.surfix.ar',
+    'https://ofi.surfix.ar',
+    'https://www.ofi.surfix.ar',
 ]
 
 LANGUAGE_CODE = 'es-ar'

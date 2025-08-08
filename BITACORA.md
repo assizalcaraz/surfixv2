@@ -1,6 +1,10 @@
 # 📓 Bitácora SurfixV2.0.2
-
 > Registro cronológico de avances, decisiones y desvíos.
+
+## 2025-08-08 
+
+ACTUALZIACION DE DOMIO 
+	Configuración nginx.conf 
 
 ## 2025-06-24 → 2025-06-25
 

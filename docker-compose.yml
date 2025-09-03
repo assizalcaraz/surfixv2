@@ -12,6 +12,8 @@ services:
     command: sh /app/entrypoint.sh
     volumes:
       - static_volume:/app/static
+    ports:
+      - "8000:8000"
     networks:
       - default
       - reverse-proxy
@@ -22,6 +24,9 @@ services:
       - postgres_data:/var/lib/postgresql/data/
     env_file:
       - .env.prod
+    networks:
+      - default
+      - reverse-proxy
 
 volumes:
   postgres_data:

@@ -46,3 +46,26 @@ shell:
 
 restart:
 	docker compose restart
+
+# Comandos para desarrollo local
+up-local:
+	docker compose -f docker-compose.dev.yml up --build -d
+
+down-local:
+	docker compose -f docker-compose.dev.yml down -v
+
+test-db:
+	docker compose -f docker-compose.dev.yml exec web python test_db_connection.py
+
+init-db:
+	docker compose -f docker-compose.dev.yml exec web python init_db.py
+
+migrate-local:
+	docker compose -f docker-compose.dev.yml exec web python manage.py makemigrations
+	docker compose -f docker-compose.dev.yml exec web python manage.py migrate
+
+createsuperuser-local:
+	docker compose -f docker-compose.dev.yml exec web python manage.py createsuperuser
+
+logs-local:
+	docker compose -f docker-compose.dev.yml logs -f

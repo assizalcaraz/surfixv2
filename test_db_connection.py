@@ -71,3 +71,4 @@ def test_connection():
 if __name__ == "__main__":
     print("🧪 Probando conexiones a PostgreSQL...")
     test_connection()
+

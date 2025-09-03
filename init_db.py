@@ -77,3 +77,4 @@ def init_database():
 if __name__ == "__main__":
     print("🚀 Inicializando base de datos PostgreSQL...")
     init_database()
+

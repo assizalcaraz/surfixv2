@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import JsonResponse, HttpResponse
 from django.views import View
 from django.template.loader import render_to_string, get_template
+from django.db.models import Q
 from weasyprint import HTML, CSS
 from xhtml2pdf import pisa
 from decimal import Decimal, InvalidOperation
@@ -58,21 +59,36 @@ def generar_presupuesto(request):
 def buscar_producto(request):
     query = request.GET.get('q', '').strip()
     if query:
-        productos = Producto.objects.filter(producto__icontains=query)[:30]
-        data = [
-            {
-                'id': p.id,
-                'codigo': p.codigo,
-                'nombre': p.producto,
-                'precio_unidad': p.precio_unidad,
-                'grano': p.grano or '',
-                'litros': p.litros or '',
-                'medidas': p.medidas or '',
-                'categoria': p.categoria or '',
-                'ancho': p.ancho or 0,
-            }
-            for p in productos
-        ]
+        try:
+            # Optimización: usar múltiples campos de búsqueda con Q objects
+            # y limitar la consulta para evitar timeouts
+            productos = Producto.objects.filter(
+                Q(producto__icontains=query) | 
+                Q(codigo__icontains=query) |
+                Q(categoria__icontains=query)
+            ).only(
+                'id', 'codigo', 'producto', 'precio_unidad', 
+                'grano', 'litros', 'medidas', 'categoria', 'ancho'
+            )[:20]  # Reducir de 30 a 20 para mejor rendimiento
+            
+            data = [
+                {
+                    'id': p.id,
+                    'codigo': p.codigo or '',
+                    'nombre': p.producto or '',
+                    'precio_unidad': float(p.precio_unidad) if p.precio_unidad else 0,
+                    'grano': p.grano or '',
+                    'litros': float(p.litros) if p.litros else 0,
+                    'medidas': p.medidas or '',
+                    'categoria': p.categoria or '',
+                    'ancho': float(p.ancho) if p.ancho else 0,
+                }
+                for p in productos
+            ]
+        except Exception as e:
+            # Manejo de errores para evitar 500
+            print(f"Error en búsqueda de productos: {e}")
+            data = []
     else:
         data = []
     return JsonResponse(data, safe=False)

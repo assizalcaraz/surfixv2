@@ -39,3 +39,4 @@ volumes:
   static_volume:
     external: true
     name: surfix_v202_static_volume
+

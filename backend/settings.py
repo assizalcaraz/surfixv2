@@ -65,7 +65,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': config('POSTGRES_DB', default='surfix'),
         'USER': config('POSTGRES_USER', default='surfix_user'),
-        'PASSWORD': config('POSTGRES_PASSWORD', default='surfix_pass'),
+        'PASSWORD': config('POSTGRES_PASSWORD', default='7f5Ejrhf4BGJD0mmullI6wZzh'),
         'HOST': config('POSTGRES_HOST', default='localhost'),
         'PORT': config('POSTGRES_PORT', default='5432'),
     }
@@ -92,11 +92,35 @@ USE_I18N = True
 USE_TZ = True
 
 # Archivos estáticos
-
 STATIC_URL = '/static/'
 
 if DEBUG:
     STATICFILES_DIRS = [BASE_DIR / "static"]
 else:
     STATIC_ROOT = BASE_DIR / "staticfiles"
+
+# Configuración de seguridad para producción
+if not DEBUG:
+    # SSL/TLS Security
+    SECURE_SSL_REDIRECT = True
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    
+    # Security Headers
+    SECURE_HSTS_SECONDS = 31536000  # 1 año
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    
+    # Cookie Security
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SESSION_COOKIE_HTTPONLY = True
+    CSRF_COOKIE_HTTPONLY = True
+    
+    # Content Security
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    SECURE_BROWSER_XSS_FILTER = True
+    X_FRAME_OPTIONS = 'DENY'
+    
+    # Referrer Policy
+    SECURE_REFERRER_POLICY = 'strict-origin-when-cross-origin'
 

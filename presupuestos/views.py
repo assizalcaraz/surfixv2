@@ -3,6 +3,7 @@ from django.http import JsonResponse, HttpResponse
 from django.views import View
 from django.template.loader import render_to_string, get_template
 from weasyprint import HTML, CSS
+from django.db.models import Q
 from xhtml2pdf import pisa
 from decimal import Decimal, InvalidOperation
 from django.conf import settings

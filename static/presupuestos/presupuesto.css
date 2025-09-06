@@ -197,3 +197,67 @@ button:hover {
         font-size: 14px;
     }
 }
+
+/* Sticky Search Bar */
+.sticky-top {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background-color: white;
+    padding-top: 10px;
+    margin-bottom: 10px;
+}
+
+/* Config Panel Styling */
+details.config-panel {
+    background: #fdf5ed;
+    border: 1px solid #ffa366;
+    border-radius: 6px;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+details.config-panel summary {
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    color: #ff4200;
+}
+
+.config-content {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.config-content input[type="number"] {
+    width: 80px;
+    padding: 6px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+#precio_composicion th {
+    background-color: #ff9c5b;
+    color: white;
+}
+
+#precio_composicion td input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 5px;
+}
+
+#opciones_categoria label {
+    margin-right: 12px;
+    font-size: 13px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.cotizacion-container label,
+.cotizacion-container input {
+    margin-right: 10px;
+}

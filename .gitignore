@@ -38,3 +38,7 @@ venv/
 
 # Otros
 *.zip
+demo_surfix.mp4
+
+# BACKUP DB 
+backup_surfix_*.sql

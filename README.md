@@ -51,8 +51,8 @@ Sistema de listas y presupuestos online para Plenor / Surfix. Desarrollado en Dj
 
 ### 🌐 Dominios
 
-* [https://surfix.store](https://surfix.store) → landing institucional (HTML estático)
-* [https://ofi.surfix.store](https://ofi.surfix.store) → aplicación Django con login y funcionalidades
+* [https://surfix.ar](https://surfix.ar) → landing institucional (HTML estático)
+* [https://ofi.surfix.ar](https://ofi.surfix.ar) → aplicación Django con login y funcionalidades
 
 ## 🔧 Makefile
 

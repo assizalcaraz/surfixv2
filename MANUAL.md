@@ -4,7 +4,7 @@
 
 ## ✏ï¸ Descripción general
 
-SurfixV2 es una aplicación web desarrollada en Django, dockerizada para facilitar el despliegue y mantenimiento. Incluye una interfaz web protegida por autenticación y una versión estática visible en `surfix.store`, con el backend funcionando bajo `ofi.surfix.store`.
+SurfixV2 es una aplicación web desarrollada en Django, dockerizada para facilitar el despliegue y mantenimiento. Incluye una interfaz web protegida por autenticación y una versión estática visible en `surfix.ar`, con el backend funcionando bajo `ofi.surfix.ar`.
 
 ---
 
@@ -97,8 +97,8 @@ SurfixV2/
 
 ## 🌐 Dominios y acceso
 
-* `https://surfix.store`: landing institucional.
-* `https://ofi.surfix.store`: interfaz de la aplicación Django.
+* `https://surfix.ar`: landing institucional.
+* `https://ofi.surfix.ar`: interfaz de la aplicación Django.
 * `/admin`: acceso limitado por IP mediante Nginx.
 
 ---
